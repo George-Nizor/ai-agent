@@ -2,6 +2,7 @@ import os
 import sys
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 def main():
     print("Hello from ai-agent!")
@@ -9,10 +10,14 @@ def main():
     load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
+    user_prompt = sys.argv[1]
+    messages = [
+        types.Content(role="user", parts=[types.Part(text=user_prompt)])
+    ]
     try:
         response = client.models.generate_content(
             model="gemini-2.0-flash-001", 
-            contents=sys.argv[1]
+            contents=messages
         )
     except Exception as e:
         print(e)
