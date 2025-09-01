@@ -1,16 +1,21 @@
 import os
 
 def get_files_info(working_directory, directory="."):
-    # Check if directory is a directory
-    if not os.path.isdir(directory):
-        raise Exception(f'Error: "{directory}" is not a directory')
+    # Resolve the full path of the directory to check
+    if os.path.isabs(directory):
+        full_path = directory
+    else:
+        full_path = os.path.join(working_directory, directory)
+    
+    # Check if the resolved path is a directory
+    if not os.path.isdir(full_path):
+        raise Exception(f'"{directory}" is not a directory')
 
-    # Check if directory is outside working directory
-    if not os.path.abspath(directory).startswith(working_directory):
-        raise Exception(f'Error: Cannot list "{directory}" as it is outside the permitted working directory')
+    # Check if the resolved path is outside working directory
+    if not os.path.abspath(full_path).startswith(os.path.abspath(working_directory)):
+        raise Exception(f'Cannot list "{directory}" as it is outside the permitted working directory')
 
     files_info = {}
-    full_path = os.path.join(working_directory, directory)
     for file in os.listdir(full_path):
         file_path = os.path.join(full_path, file)
         files_info[file] = {
