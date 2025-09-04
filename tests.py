@@ -1,4 +1,5 @@
 import functions.get_files_info as get_files_info
+import functions.get_file_content as get_file_content
 import os
 
 def test_get_files_info():
@@ -40,5 +41,34 @@ def test_get_files_info():
         print(f"    Error: {e}")
     print()
 
+
+def test_get_file_content():
+    print("Testing get_file_content function...\n")
+    
+    # Test cases
+    test_cases = [
+        ("calculator", "main.py", "Valid file in working directory"),
+        ("calculator", "pkg/calculator.py", "Valid file in subdirectory"),
+        ("calculator", "/bin/cat", "File outside working directory (should error)"),
+        ("calculator", "pkg/does_not_exist.py", "Non-existent file (should error)")
+    ]
+    
+    for working_dir, file_path, description in test_cases:
+        print(f"Testing: {description}")
+        print(f"get_file_content(\"{working_dir}\", \"{file_path}\"):")
+        
+        result = get_file_content.get_file_content(working_dir, file_path)
+        
+        # Check if the result is an error or actual content
+        if result.startswith("Error:"):
+            print(f"    Error occurred: {result}")
+        else:
+            print(f"    Success! Read {len(result)} characters")
+            print(f"    Full content:\n{result}")
+        
+        print()
+
+
 if __name__ == "__main__":
-    test_get_files_info()
+    # test_get_files_info()
+    test_get_file_content()
