@@ -1,5 +1,6 @@
 import functions.get_files_info as get_files_info
 import functions.get_file_content as get_file_content
+from functions.write_file import write_file
 import os
 
 def test_get_files_info():
@@ -69,6 +70,26 @@ def test_get_file_content():
         print()
 
 
+def test_write_file():
+    print("Testing write_file function...\n")
+    
+    # Test cases with expected outcomes
+    test_cases = [
+        ("calculator", "lorem.txt", "wait, this isn't lorem ipsum", True),
+        ("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet", True),
+        ("calculator", "/tmp/temp.txt", "this should not be allowed", False),
+        ("calculator", "../outside.txt", "this should not be allowed", False)
+    ]
+    
+    for working_dir, file_path, content, should_succeed in test_cases:
+        try:
+            result = write_file(working_dir, file_path, content)
+            print(result)
+        except Exception as e:
+            print(e)
+        print()
+
 if __name__ == "__main__":
     # test_get_files_info()
-    test_get_file_content()
+    #test_get_file_content()
+    test_write_file()
